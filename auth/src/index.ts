@@ -4,6 +4,8 @@ import express from 'express';
 const app = express();
 app.use(json());
 
-app.get('/', (req, res) => res.send('Hello World'));
+app.get('/api/users/currentuser', (req, res) => {
+  res.send('Hi there');
+});
 
-app.listen(3000, () => console.log('Server is up at 3000...'));
+app.listen(3000, () => console.log('Server is up at 3000... V1 '));
