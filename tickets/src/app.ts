@@ -1,4 +1,4 @@
-import { errorHandler, NotFoundError } from '@vsrtickets/common';
+import { currentUser, errorHandler, NotFoundError } from '@vsrtickets/common';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 import express from 'express';
@@ -15,6 +15,7 @@ app.use(
     secure: process.env.NODE_ENV !== 'test',
   })
 );
+app.use(currentUser);
 
 app.use(createTicketRouter);
 
