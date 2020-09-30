@@ -65,7 +65,7 @@ it('creates a ticket with valid inputs', async () => {
 
   const title = 'alsdkjflaksjf';
 
-  await request(app)
+  const response = await request(app)
     .post('/api/tickets')
     .set('Cookie', global.signin())
     .send({
@@ -77,6 +77,6 @@ it('creates a ticket with valid inputs', async () => {
   tickets = await Ticket.find({}).exec();
 
   expect(tickets.length).toEqual(1);
-  expect(tickets[0].price).toEqual(33);
-  expect(tickets[0].title).toEqual(title);
+  expect(response.body.price).toEqual(33);
+  expect(response.body.title).toEqual(title);
 });
