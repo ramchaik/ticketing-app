@@ -11,12 +11,17 @@ stan.on('connect', () => {
   console.log('Listner conneted to NATS');
 
   stan.on('close', () => {
-    console.log("NATS connection closed!");
-    
+    console.log('NATS connection closed!');
+
     process.exit();
   });
 
-  const options = stan.subscriptionOptions().setManualAckMode(true);
+  const options = stan
+    .subscriptionOptions()
+    .setManualAckMode(true)
+    .setDeliverAllAvailable()
+    .setDurableName('accounting-service');
+
   const subscription = stan.subscribe(
     'ticket:created',
     'order-service-queue-group',
@@ -37,4 +42,4 @@ stan.on('connect', () => {
 });
 
 process.on('SIGINT', () => stan.close());
-process.on('SIGTERM', () => stan.close())
+process.on('SIGTERM', () => stan.close());
