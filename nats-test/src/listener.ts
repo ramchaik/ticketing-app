@@ -16,29 +16,7 @@ stan.on('connect', () => {
     process.exit();
   });
 
-  const options = stan
-    .subscriptionOptions()
-    .setManualAckMode(true)
-    .setDeliverAllAvailable()
-    .setDurableName('accounting-service');
-
-  const subscription = stan.subscribe(
-    'ticket:created',
-    'order-service-queue-group',
-    options
-  );
-
-  subscription.on('message', (msg: Message) => {
-    const data = msg.getData();
-
-    if (typeof data === 'string') {
-      const parsedData = JSON.parse(data);
-
-      console.log(`Received event #${msg.getSequence()}, with data: ${data}`);
-    }
-
-    msg.ack();
-  });
+  new TicketCreatedListner(stan).listen();
 });
 
 process.on('SIGINT', () => stan.close());
@@ -84,5 +62,16 @@ abstract class Listner {
     return typeof data === 'string'
       ? JSON.parse(data)
       : JSON.parse(data.toString('utf8'));
+  }
+}
+
+class TicketCreatedListner extends Listner {
+  subject = 'ticket:created';
+  queueGroupName = 'payments-service';
+
+  onMessage(data: any, msg: Message) {
+    console.log(`Event Data:`, data);
+
+    msg.ack();
   }
 }
