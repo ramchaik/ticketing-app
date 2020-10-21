@@ -1,7 +1,5 @@
+import { Listner, Subjects, TicketCreatedEvent } from '@vsrtickets/common';
 import { Message } from 'node-nats-streaming';
-import { Listner } from './base-listner';
-import { Subjects } from './subjects';
-import { TicketCreatedEvent } from './ticket-created-event';
 
 export class TicketCreatedListner extends Listner<TicketCreatedEvent> {
   readonly subject: Subjects.TicketCreated = Subjects.TicketCreated;
