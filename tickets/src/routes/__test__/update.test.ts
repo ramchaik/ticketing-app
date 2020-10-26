@@ -1,5 +1,6 @@
 import request from 'supertest';
 import { app } from '../../app';
+import { natsWrapper } from '../../nats-wrapper';
 import { getRandomIdHexString } from './utils/genericUtils';
 
 it('returns a 404 if provided id does not exits', async () => {
@@ -100,4 +101,29 @@ it('updates the ticket provided valid inputs', async () => {
 
   expect(ticketResponse.body.title).toEqual(updatedTicket.title);
   expect(ticketResponse.body.price).toEqual(updatedTicket.price);
+});
+
+it('publish an event', async () => {
+  const cookie = global.signin();
+
+  const response = await request(app)
+    .post(`/api/tickets`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'alskdf',
+      price: 32,
+    });
+  
+  const updatedTicket = {
+      title: 'Hello',
+      price: 30,
+  };
+
+  await request(app)
+    .put(`/api/tickets/${response.body.id}`)
+    .set('Cookie', cookie)
+    .send(updatedTicket)
+    .expect(200);
+  
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });
