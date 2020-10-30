@@ -1,5 +1,6 @@
-import mongoose from 'mongoose';
 import { OrderStatus } from '@vsrtickets/common';
+import mongoose from 'mongoose';
+import { TicketDoc } from './ticket';
 
 interface OrderAttrs {
   userId: string;
