@@ -1,7 +1,9 @@
-import { requireAuth, validateRequest } from '@vsrtickets/common';
+import { NotFoundError, requireAuth, validateRequest } from '@vsrtickets/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import mongoose from 'mongoose';
+import { Ticket } from '../models/ticket';
+import { Order } from '../models/order';
 
 const router = express.Router();
 
@@ -17,6 +19,22 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
+    const { ticketId } = req.body;
+
+    // Find the ticket the user is trying to order in database
+    const ticket = await Ticket.findById(ticketId);
+    if (!ticket) {
+      throw new NotFoundError();
+    }
+
+    // Make sure the ticket is not already reserved
+
+    // Calculate the expiration date for this order
+
+    // Build the order and save it to database
+
+    // Publish the event saying the event was created
+
     res.send({});
   }
 );
