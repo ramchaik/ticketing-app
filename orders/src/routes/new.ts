@@ -1,4 +1,4 @@
-import { NotFoundError, requireAuth, validateRequest } from '@vsrtickets/common';
+import { BadRequestError, NotFoundError, OrderStatus, requireAuth, validateRequest } from '@vsrtickets/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import mongoose from 'mongoose';
@@ -28,6 +28,23 @@ router.post(
     }
 
     // Make sure the ticket is not already reserved
+    // Run query to look all orders. Find the order where the ticket is the ticket we just found *and* the order status is *not* cancelled.
+    // If we find an order from that means the ticket *is* reserved.
+    const existingOrder = await Order.findOne({
+      ticket: ticket,
+      status: {
+        $in: [
+          OrderStatus.Created,
+          OrderStatus.AwaitingPayment,
+          OrderStatus.Complete,
+        ]
+      }
+    });
+
+    if (existingOrder) {
+      throw new BadRequestError('Ticket is already reserved');
+    }
+
 
     // Calculate the expiration date for this order
 
