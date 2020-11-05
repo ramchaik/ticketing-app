@@ -1,4 +1,10 @@
-import { BadRequestError, NotFoundError, OrderStatus, requireAuth, validateRequest } from '@vsrtickets/common';
+import {
+  BadRequestError,
+  NotFoundError,
+  OrderStatus,
+  requireAuth,
+  validateRequest,
+} from '@vsrtickets/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import mongoose from 'mongoose';
@@ -35,7 +41,6 @@ router.post(
       throw new BadRequestError('Ticket is already reserved');
     }
 
-
     // Calculate the expiration date for this order
     const expiration = new Date();
     expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS);
@@ -45,8 +50,8 @@ router.post(
       userId: req.currentUser!.id,
       status: OrderStatus.Created,
       expiresAt: expiration,
-      ticket
-    })
+      ticket,
+    });
     await order.save();
 
     // Publish the event saying the event was created
