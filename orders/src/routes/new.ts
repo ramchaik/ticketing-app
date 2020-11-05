@@ -5,6 +5,8 @@ import mongoose from 'mongoose';
 import { Ticket } from '../models/ticket';
 import { Order } from '../models/order';
 
+const EXPIRATION_WINDOW_SECONDS = 15 * 60;
+
 const router = express.Router();
 
 router.post(
@@ -35,12 +37,20 @@ router.post(
 
 
     // Calculate the expiration date for this order
+    const expiration = new Date();
+    expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS);
 
     // Build the order and save it to database
+    const order = Order.build({
+      userId: req.currentUser!.id,
+      status: OrderStatus.Created,
+      expiresAt: expiration,
+      ticket
+    })
+    await order.save();
 
     // Publish the event saying the event was created
-
-    res.send({});
+    res.status(201).send(order);
   }
 );
 
