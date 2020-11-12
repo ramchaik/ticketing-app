@@ -55,6 +55,7 @@ router.post(
     await order.save();
 
     // Publish the event saying the event was created
+
     res.status(201).send(order);
   }
 );
