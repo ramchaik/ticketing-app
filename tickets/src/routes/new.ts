@@ -2,7 +2,7 @@ import { requireAuth, validateRequest } from '@vsrtickets/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { TicketCreatedPublisher } from '../events/publishers/ticket-created-publisher';
-import { Ticket } from '../models/tickets';
+import { Ticket } from '../models/ticket';
 import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
@@ -27,7 +27,7 @@ router.post(
       id: ticket.id,
       title: ticket.title,
       price: ticket.price,
-      userId: ticket.userId
+      userId: ticket.userId,
     });
 
     res.status(201).send(ticket);
