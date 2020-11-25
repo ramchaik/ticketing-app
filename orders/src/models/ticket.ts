@@ -1,6 +1,5 @@
-import mongoose, { version } from 'mongoose';
+import mongoose from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
-import { idText } from 'typescript';
 import { Order, OrderStatus } from './order';
 
 interface TicketAttrs {
@@ -48,6 +47,24 @@ const ticketSchema = new mongoose.Schema(
 
 ticketSchema.set('versionKey', 'version');
 ticketSchema.plugin(updateIfCurrentPlugin);
+
+/**
+ *
+ * @note
+ *  - versioning without plugin - Use the below function and update listner (or where you save) to save document, to add version to doc
+ *  - will remove dependency on outside service
+ *
+ * @code
+ * // Middleware
+ * ticketSchema.pre('save', function (done) {
+ *  // @ts-ignore
+ *    this.$where = {
+ *      version: this.get('version') - 1, // version change strategy
+ *   };
+ *
+ *  done();
+ *
+ */
 
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
   return new Ticket({
