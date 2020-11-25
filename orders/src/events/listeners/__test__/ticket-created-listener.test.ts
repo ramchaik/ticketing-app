@@ -45,6 +45,10 @@ it('creates and saves a ticket', async () => {
 
 it('acks the message', async () => {
   const { listner, data, msg } = await setup();
+
   // call the onMessage function with the data object + message object
+  await listner.onMessage(data, msg);
+
   // write assertion to make sure the ack function was called
+  expect(msg.ack).toHaveBeenCalled();
 });
