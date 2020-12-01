@@ -2,6 +2,7 @@ import { Listner, OrderCreatedEvent, Subjects } from '@vsrtickets/common';
 import { Message } from 'node-nats-streaming';
 import { queueGroupName } from './queue-group-name';
 import { Ticket } from '../../models/ticket';
+import { TicketUpdatedPublisher } from '../publishers/ticket-updated-publisher';
 
 export class OrderCreatedListner extends Listner<OrderCreatedEvent> {
   subject: Subjects.OrderCreated = Subjects.OrderCreated;
@@ -30,6 +31,14 @@ export class OrderCreatedListner extends Listner<OrderCreatedEvent> {
     });
 
     await ticket.save();
+    await new TicketUpdatedPublisher(this.client).publish({
+      id: ticket.id,
+      version: ticket.version,
+      title: ticket.title,
+      price: ticket.price,
+      userId: ticket.userId,
+      orderId: ticket.orderId,
+    });
 
     msg.ack();
   }
