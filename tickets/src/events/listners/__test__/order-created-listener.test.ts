@@ -48,3 +48,21 @@ const setup = async () => {
     msg,
   };
 };
+
+it('sets the orderId of the ticket', async () => {
+  const { listner, ticket, data, msg } = await setup();
+
+  await listner.onMessage(data, msg);
+
+  const updatedTicket = await Ticket.findById(ticket.id);
+
+  expect(updatedTicket!.orderId).toEqual(data.id);
+});
+
+it('acks the message', async () => {
+  const { listner, data, msg } = await setup();
+
+  await listner.onMessage(data, msg);
+
+  expect(msg.ack).toHaveBeenCalled();
+});
