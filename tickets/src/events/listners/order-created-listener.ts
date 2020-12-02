@@ -16,6 +16,7 @@ export class OrderCreatedListner extends Listner<OrderCreatedEvent> {
      *  - If no ticket, throw error
      *  - Mark the ticket as being reserved by setting it's orderId property
      *  - Save the ticket
+     *  - Publish the ticket updated event
      *  - Ack the message
      *
      */
