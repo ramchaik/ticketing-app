@@ -3,10 +3,10 @@ import mongoose from 'mongoose';
 import { Message } from 'node-nats-streaming';
 import { Ticket } from '../../../models/ticket';
 import { natsWrapper } from '../../../nats-wrapper';
-import { TicketUpdatedListner } from '../ticket-updated-listener';
+import { TicketUpdatedListener } from '../ticket-updated-listener';
 
 const setup = async () => {
-  const listner = new TicketUpdatedListner(natsWrapper.client);
+  const listner = new TicketUpdatedListener(natsWrapper.client);
 
   const ticket = Ticket.build({
     id: new mongoose.Types.ObjectId().toHexString(),

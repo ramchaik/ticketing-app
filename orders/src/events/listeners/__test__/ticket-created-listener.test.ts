@@ -1,13 +1,13 @@
 import { TicketCreatedEvent } from '@vsrtickets/common';
-import { TicketCreatedListner } from '../ticket-created-listener';
-import { natsWrapper } from '../../../nats-wrapper';
 import mongoose from 'mongoose';
 import { Message } from 'node-nats-streaming';
 import { Ticket } from '../../../models/ticket';
+import { natsWrapper } from '../../../nats-wrapper';
+import { TicketCreatedListener } from '../ticket-created-listener';
 
 const setup = async () => {
   // create an instance of server
-  const listner = new TicketCreatedListner(natsWrapper.client);
+  const listner = new TicketCreatedListener(natsWrapper.client);
   // create a fake data event
   const data: TicketCreatedEvent['data'] = {
     version: 0,

@@ -1,9 +1,9 @@
+import { Listener, Subjects, TicketCreatedEvent } from '@vsrtickets/common';
 import { Message } from 'node-nats-streaming';
-import { Subjects, Listner, TicketCreatedEvent } from '@vsrtickets/common';
 import { Ticket } from '../../models/ticket';
 import { queueGroupName } from './queue-group-name';
 
-export class TicketCreatedListner extends Listner<TicketCreatedEvent> {
+export class TicketCreatedListener extends Listener<TicketCreatedEvent> {
   subject: Subjects.TicketCreated = Subjects.TicketCreated;
   queueGroupName = queueGroupName;
 

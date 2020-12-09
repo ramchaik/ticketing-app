@@ -1,10 +1,10 @@
-import { Listner, OrderCreatedEvent, Subjects } from '@vsrtickets/common';
+import { Listener, OrderCreatedEvent, Subjects } from '@vsrtickets/common';
 import { Message } from 'node-nats-streaming';
-import { queueGroupName } from './queue-group-name';
 import { Ticket } from '../../models/ticket';
 import { TicketUpdatedPublisher } from '../publishers/ticket-updated-publisher';
+import { queueGroupName } from './queue-group-name';
 
-export class OrderCreatedListner extends Listner<OrderCreatedEvent> {
+export class OrderCreatedListner extends Listener<OrderCreatedEvent> {
   subject: Subjects.OrderCreated = Subjects.OrderCreated;
   queueGroupName = queueGroupName;
 
