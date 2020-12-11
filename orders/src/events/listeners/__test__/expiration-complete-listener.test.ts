@@ -7,9 +7,7 @@ import { natsWrapper } from '../../../nats-wrapper';
 import { ExpirationCompleteListener } from '../expiration-complete-listener';
 
 const setup = async () => {
-  const listener = await new ExpirationCompleteListener(
-    natsWrapper.client
-  ).listen();
+  const listener = new ExpirationCompleteListener(natsWrapper.client);
 
   const ticket = await Ticket.build({
     id: mongoose.Types.ObjectId().toHexString(),
@@ -19,7 +17,7 @@ const setup = async () => {
   await ticket.save();
 
   const order = await Order.build({
-    status: OrderStatus.Cancelled,
+    status: OrderStatus.Created,
     userId: 'abc',
     expiresAt: new Date(),
     ticket,
@@ -37,3 +35,33 @@ const setup = async () => {
 
   return { listener, ticket, order, data, msg };
 };
+
+it('updates the order status to cancelled', async () => {
+  const { listener, order, data, msg } = await setup();
+
+  await listener.onMessage(data, msg);
+
+  const updatedOrder = await Order.findById(order.id);
+  expect(updatedOrder!.status).toEqual(OrderStatus.Cancelled);
+});
+
+it('emit an OrderCancelled event', async () => {
+  const { listener, order, data, msg } = await setup();
+
+  await listener.onMessage(data, msg);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+
+  const eventData = JSON.parse(
+    (natsWrapper.client.publish as jest.Mock).mock.calls[0][1]
+  );
+  expect(eventData.id).toEqual(order.id);
+});
+
+it('ack the message', async () => {
+  const { listener, data, msg } = await setup();
+
+  await listener.onMessage(data, msg);
+
+  expect(msg.ack).toHaveBeenCalled();
+});
