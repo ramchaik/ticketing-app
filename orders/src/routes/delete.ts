@@ -4,8 +4,8 @@ import {
   requireAuth,
 } from '@vsrtickets/common';
 import express, { Request, Response } from 'express';
-import { Order, OrderStatus } from '../models/order';
 import { OrderCancelledPublisher } from '../events/publishers/order-cancelled-publisher';
+import { Order, OrderStatus } from '../models/order';
 import { natsWrapper } from '../nats-wrapper';
 
 const router = express.Router();
@@ -31,10 +31,10 @@ router.delete(
 
     // publishing an event saying this was cancelled!
     await new OrderCancelledPublisher(natsWrapper.client).publish({
-      id: order.id,
+      id: order.id!,
       version: order.version,
       ticket: {
-        id: order.ticket.id,
+        id: order.ticket.id!,
       },
     });
 

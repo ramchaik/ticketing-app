@@ -8,9 +8,9 @@ import {
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import mongoose from 'mongoose';
+import { OrderCreatedPublisher } from '../events/publishers/order-created-publisher';
 import { Order } from '../models/order';
 import { Ticket } from '../models/ticket';
-import { OrderCreatedPublisher } from '../events/publishers/order-created-publisher';
 import { natsWrapper } from '../nats-wrapper';
 
 const EXPIRATION_WINDOW_SECONDS = 15 * 60;
@@ -58,13 +58,13 @@ router.post(
 
     // Publish the event saying the event was created
     new OrderCreatedPublisher(natsWrapper.client).publish({
-      id: order.id,
+      id: order.id!,
       version: order.version,
       status: order.status,
       userId: order.userId,
       expiresAt: order.expiresAt.toISOString(),
       ticket: {
-        id: ticket.id,
+        id: ticket.id!,
         price: ticket.price,
       },
     });
