@@ -38,6 +38,7 @@
   "devDependencies": {
     "@types/jest": "^26.0.13",
     "@types/supertest": "^2.0.10",
+    "dotenv": "^8.2.0",
     "jest": "^26.4.2",
     "mongodb-memory-server": "^6.7.0",
     "supertest": "^4.0.2",

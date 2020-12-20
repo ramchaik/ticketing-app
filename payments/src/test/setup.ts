@@ -2,6 +2,8 @@ import jwt from 'jsonwebtoken';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 
+require('dotenv').config();
+
 declare global {
   namespace NodeJS {
     interface Global {
