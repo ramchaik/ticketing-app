@@ -4,6 +4,7 @@ import Stripe from 'stripe';
 import request from 'supertest';
 import { app } from '../../app';
 import { Order } from '../../models/order';
+import { Payment } from '../../models/payment';
 import { stripe } from '../../stripe';
 
 it('returns a 404 when purchasing an order that does not exit', async () => {
@@ -89,4 +90,11 @@ it('returns a 201 with valid inputs', async () => {
 
   expect(stripeCharge).toBeDefined();
   expect(stripeCharge!.currency).toEqual('inr');
+
+  const payment = await Payment.findOne({
+    orderId: order.id,
+    stripeId: stripeCharge!.id,
+  });
+
+  expect(payment).not.toBeNull();
 });
