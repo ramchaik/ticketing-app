@@ -32,7 +32,7 @@ it("returns a 401 when purchasing an order that doesn't belong to the user", asy
       token: 'alksjdf',
       orderId: order.id,
     })
-    .expect(40);
+    .expect(401);
 });
 
 it('returns a 400 when purchasing a cancelled order', async () => {});
