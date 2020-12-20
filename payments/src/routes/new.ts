@@ -35,7 +35,7 @@ router.post(
       source: token,
     });
 
-    res.send({ success: true });
+    res.status(201).send({ success: true });
   }
 );
 
