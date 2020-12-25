@@ -21,7 +21,12 @@ const OrderShow = ({ order }) => {
     return <div>Order Expired</div>;
   }
 
-  return <div>Time left to pay: {timeLeft} seconds</div>;
+  const timer =
+    timeLeft > 60
+      ? `${Math.floor(timeLeft / 60)} minutes ${timeLeft % 60} seconds`
+      : `${timeLeft} seconds`;
+
+  return <div>Time left to pay: {timer}</div>;
 };
 
 OrderShow.getInitialProps = async (context, client) => {
