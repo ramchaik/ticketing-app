@@ -16,7 +16,7 @@ const setup = async () => {
   await ticket.save();
 
   const data: TicketUpdatedEvent['data'] = {
-    id: ticket.id,
+    id: ticket.id!,
     version: ticket.version + 1,
     title: 'new concert',
     price: 999,
