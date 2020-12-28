@@ -1,9 +1,9 @@
-import { OrderCreatedEvent, OrderStatus, Subjects } from '@vsrtickets/common';
-import { OrderCreatedListner } from '../order-created-listener';
-import { natsWrapper } from '../../../nats-wrapper';
-import { Ticket } from '../../../models/ticket';
+import { OrderCreatedEvent, OrderStatus } from '@vsrtickets/common';
 import mongoose from 'mongoose';
 import { Message } from 'node-nats-streaming';
+import { Ticket } from '../../../models/ticket';
+import { natsWrapper } from '../../../nats-wrapper';
+import { OrderCreatedListner } from '../order-created-listener';
 
 const setup = async () => {
   /**
@@ -31,7 +31,7 @@ const setup = async () => {
     userId: 'abc',
     expiresAt: 'abkc',
     ticket: {
-      id: ticket.id,
+      id: ticket.id!,
       price: ticket.price,
     },
   };
